@@ -31,30 +31,36 @@ class _TasksState extends State<Tasks> {
       date: DateTime.now().subtract(Duration(days: 2)),
       category: Category.personal,
     ),
+    Task(
+      title: 'add task test',
+      description: '',
+      date: DateTime.now().subtract(Duration(days: 2)),
+      category: Category.personal,
+    ),
     // Add more tasks with descriptions as needed
   ];
 
   void _openAddTaskOverlay() {
-    print(' _openAddTaskOverlay appelée!'); 
     showModalBottomSheet(
-       
-      context: context, 
-      isScrollControlled: true,
-      builder: (ctx) {
-      print('Builder exécuté!'); 
-      return const NewTask();
-    },
-  ).then((_) {
-    print(' Modal fermé!'); 
-  });
+      context: context,
+      builder: (ctx) => NewTask(onAddTask: _addTask),
+    );
   }
+
+  Future<void> _addTask(Task task) async {
+  await Future.delayed(Duration(seconds: 2));
+  setState(() {
+    _registeredTasks.add(task);
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutter ToDoList'),
-        backgroundColor: Colors.blue, 
+        backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
