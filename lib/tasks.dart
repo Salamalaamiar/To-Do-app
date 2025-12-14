@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todolist_app/models/task.dart';
+import 'package:todolist_app/services/firestore.dart';
 import 'package:todolist_app/widgets/new_task.dart';
 import 'package:todolist_app/widgets/tasks_list.dart';
 
@@ -12,7 +13,9 @@ class Tasks extends StatefulWidget {
 }
 
 class _TasksState extends State<Tasks> {
-  final List<Task> _registeredTasks = [
+  final FirestoreService firestoreService= FirestoreService();
+  
+  /*final List<Task> _registeredTasks = [
     Task(
       title: 'Apprendre Flutter',
       description: 'Suivre le cours pour apprendre de nouvelles compétences',
@@ -38,7 +41,7 @@ class _TasksState extends State<Tasks> {
       category: Category.personal,
     ),
     // Add more tasks with descriptions as needed
-  ];
+  ];*/
 
   void _openAddTaskOverlay() {
     showModalBottomSheet(
@@ -47,11 +50,13 @@ class _TasksState extends State<Tasks> {
     );
   }
 
-  Future<void> _addTask(Task task) async {
-  await Future.delayed(Duration(seconds: 2));
-  setState(() {
-    _registeredTasks.add(task);
-  });
+ 
+void _addTask(Task task) {
+setState(() {
+//_registeredTasks.add(task);
+firestoreService.addTask(task);
+Navigator.pop(context);
+});
 }
 
 
@@ -73,7 +78,7 @@ class _TasksState extends State<Tasks> {
       body: Column(
         children: [
           const Text('The title'),
-          Expanded(child: TasksList(tasks: _registeredTasks)),
+          Expanded(child: TasksList()),
         ],
       ),
     );
